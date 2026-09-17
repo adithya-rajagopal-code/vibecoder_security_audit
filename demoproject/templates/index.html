@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeShop — Next-Gen Hardware & Developer Gear</title>
+  <!-- Google Fonts: Inter & Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            electric: {
+              300: '#fde047',
+              400: '#facc15',
+              500: '#eab308',
+              600: '#ca8a04',
+            },
+            onyx: {
+              950: '#000000',
+              900: '#080808',
+              850: '#0f0f0f',
+              800: '#171717',
+              700: '#262626',
+            }
+          },
+          boxShadow: {
+            'glow-yellow': '0 0 25px -4px rgba(250, 204, 21, 0.45)',
+            'glow-yellow-sm': '0 0 15px -3px rgba(250, 204, 21, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #030303;
+      color: #f4f4f5;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(250, 204, 21, 0.07) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(234, 179, 8, 0.05) 0px, transparent 50%),
+        linear-gradient(to bottom, #000000, #050505);
+    }
+    .glass-nav {
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(250, 204, 21, 0.15);
+    }
+    .glass-card {
+      background: rgba(14, 14, 14, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(250, 204, 21, 0.4);
+      box-shadow: 0 16px 32px -10px rgba(250, 204, 21, 0.18);
+    }
+    .specular-border {
+      position: relative;
+    }
+    .specular-border::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(250,204,21,0.3), rgba(255,255,255,0.03) 40%, rgba(250,204,21,0.15) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(1.06); }
+    }
+    .ambient-pulse {
+      animation: pulse-slow 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-electric-400 selection:text-black">
+
+  <!-- Top Caution / Demo Ribbon (Black & Electric Yellow Hazard Aesthetic) -->
+  <div class="bg-black border-b border-electric-400/30 py-2 px-4 text-xs font-mono text-electric-400 text-center flex items-center justify-center space-x-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-electric-400 animate-ping"></span>
+    <span class="font-bold tracking-wider uppercase">VibeShop Prototype Store</span>
+    <span class="text-neutral-600">•</span>
+    <span class="text-neutral-300">Target Microservice for ViberGuard Security Review</span>
+    <span class="text-neutral-600">•</span>
+    <a href="http://localhost:3000" target="_blank" class="underline hover:text-white transition-colors font-bold text-electric-400">
+      Open ViberGuard Auditor &rarr;
+    </a>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <nav class="sticky top-0 z-40 glass-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Brand Logo (Black & Yellow High Contrast) -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-electric-400 flex items-center justify-center shadow-glow-yellow text-black font-extrabold font-display">
+          <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-extrabold text-2xl tracking-tight text-white">
+            Vibe<span class="text-electric-400">Shop</span>
+          </span>
+          <span class="ml-2 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-electric-400/10 text-electric-400 border border-electric-400/30">
+            PROTOTYPE
+          </span>
+        </div>
+      </div>
+
+      <!-- Center Search Bar -->
+      <div class="hidden md:flex flex-1 max-w-md mx-8">
+        <div class="relative w-full">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search catalog or user profiles..." 
+            class="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-neutral-900/90 border border-neutral-800 text-white placeholder-neutral-500 focus:outline-none focus:border-electric-400 focus:ring-1 focus:ring-electric-400/50 transition-all font-sans"
+            onkeyup="handleSearch(this.value)"
+          >
+          <svg class="w-4 h-4 text-electric-400 absolute left-3.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right Actions: Cart & API Inspector -->
+      <div class="flex items-center space-x-3 sm:space-x-4">
+        <!-- Live API Inspector Toggle -->
+        <button 
+          onclick="toggleApiModal()"
+          class="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-electric-400/40 text-xs font-mono text-neutral-300 hover:text-electric-400 transition-all"
+        >
+          <svg class="w-3.5 h-3.5 text-electric-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
+          <span>Inspect API</span>
+        </button>
+
+        <!-- Bold Electric Yellow Cart Button -->
+        <button 
+          onclick="toggleCartModal()" 
+          class="relative flex items-center space-x-2 px-4 py-2 rounded-xl bg-electric-400 hover:bg-electric-300 text-black font-extrabold text-xs shadow-glow-yellow transition-all transform active:scale-95"
+        >
+          <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span>Cart</span>
+          <span id="cartCount" class="ml-1 w-5 h-5 rounded-full bg-black text-electric-400 text-[10px] font-mono font-bold flex items-center justify-center border border-electric-400/40">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative overflow-hidden pt-12 pb-16 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto">
+    <!-- Ambient Yellow Glow Orbs -->
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-electric-400/10 blur-3xl pointer-events-none ambient-pulse"></div>
+
+    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-neutral-900 border border-electric-400/30 text-xs font-mono text-electric-400 mb-6 shadow-glow-yellow-sm">
+      <span class="w-2 h-2 rounded-full bg-electric-400"></span>
+      <span>Live Microservice • Flask Backend Online</span>
+    </div>
+
+    <h1 class="font-display font-black text-4xl sm:text-6xl tracking-tight text-white leading-tight">
+      High-Impact Gear for <br class="hidden sm:inline">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-electric-400 via-amber-300 to-yellow-500">
+        Elite Software Builders
+      </span>
+    </h1>
+
+    <p class="mt-4 text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+      Curated hardware essentials. Minimal friction, instant cart execution, and direct Stripe payment routing.
+    </p>
+
+    <!-- Key Metrics Pills -->
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-neutral-300">
+      <div class="px-3.5 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 flex items-center space-x-2">
+        <svg class="w-3.5 h-3.5 text-electric-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <span>4 Hardware Items in Catalog</span>
+      </div>
+      <div class="px-3.5 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 flex items-center space-x-2">
+        <svg class="w-3.5 h-3.5 text-electric-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <span>Stripe Gateway Configured</span>
+      </div>
+      <div class="px-3.5 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 flex items-center space-x-2">
+        <svg class="w-3.5 h-3.5 text-electric-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span>Sub-10ms Flask Response</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Catalog Grid -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 w-full">
+    <div class="flex items-center justify-between pb-6 border-b border-neutral-800 mb-8">
+      <div>
+        <h2 class="font-display font-bold text-2xl text-white tracking-tight">Featured Hardware</h2>
+        <p class="text-xs text-neutral-400 mt-1">Live data queried from <code class="text-electric-400 font-mono">products.py</code></p>
+      </div>
+      <div class="flex items-center space-x-2 text-xs text-neutral-400 font-mono">
+        <span class="w-2 h-2 rounded-full bg-electric-400"></span>
+        <span>Stock Online</span>
+      </div>
+    </div>
+
+    <!-- Product Cards Grid -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Dynamically populated from /api/products -->
+    </div>
+  </main>
+
+  <!-- Live API Demo & Vulnerability Inspection Drawer Modal -->
+  <div id="apiModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="glass-card specular-border rounded-3xl max-w-2xl w-full p-6 sm:p-8 relative overflow-hidden text-left shadow-2xl bg-neutral-950 border border-neutral-800">
+      <div class="flex items-center justify-between pb-4 border-b border-neutral-800 mb-5">
+        <div class="flex items-center space-x-3">
+          <div class="p-2.5 rounded-xl bg-electric-400/10 border border-electric-400/30 text-electric-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-lg text-white">Live Backend Endpoints</h3>
+            <p class="text-xs text-neutral-400">Test the VibeShop microservice API live from your browser</p>
+          </div>
+        </div>
+        <button onclick="toggleApiModal()" class="text-neutral-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Test Buttons -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <button onclick="fetchEndpoint('/api/products')" class="p-2.5 rounded-xl bg-neutral-900 hover:bg-electric-400/15 border border-neutral-800 hover:border-electric-400/40 text-xs font-mono text-electric-400 text-center transition-all">
+          GET /api/products
+        </button>
+        <button onclick="fetchEndpoint('/api/products/1')" class="p-2.5 rounded-xl bg-neutral-900 hover:bg-electric-400/15 border border-neutral-800 hover:border-electric-400/40 text-xs font-mono text-electric-400 text-center transition-all">
+          GET /products/1
+        </button>
+        <button onclick="fetchEndpoint('/api/health')" class="p-2.5 rounded-xl bg-neutral-900 hover:bg-electric-400/15 border border-neutral-800 hover:border-electric-400/40 text-xs font-mono text-electric-400 text-center transition-all">
+          GET /api/health
+        </button>
+        <button onclick="fetchEndpoint('/api/info')" class="p-2.5 rounded-xl bg-neutral-900 hover:bg-electric-400/15 border border-neutral-800 hover:border-electric-400/40 text-xs font-mono text-electric-400 text-center transition-all">
+          GET /api/info
+        </button>
+      </div>
+
+      <!-- Code Response Box -->
+      <div class="rounded-2xl bg-black border border-neutral-800 p-4 overflow-x-auto text-xs font-mono leading-relaxed max-h-64 shadow-inner">
+        <pre id="apiOutput" class="text-electric-400">// Click an endpoint above to see the live JSON response...</pre>
+      </div>
+
+      <div class="mt-4 p-3 rounded-xl bg-electric-400/10 border border-electric-400/30 text-xs text-neutral-200 flex items-start space-x-2.5">
+        <svg class="w-4 h-4 text-electric-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <div>
+          <strong class="text-electric-400">ViberGuard Demo Target:</strong> This project contains intentional vulnerabilities in <code>config.py</code> (hardcoded Stripe secret) and <code>users.py</code> (SQL injection). Upload <code>demoproject.zip</code> to ViberGuard at port 3000 to audit it!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Modal -->
+  <div id="cartModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="glass-card specular-border rounded-3xl max-w-md w-full p-6 sm:p-8 relative text-left shadow-2xl bg-neutral-950 border border-neutral-800">
+      <div class="flex items-center justify-between pb-4 border-b border-neutral-800 mb-4">
+        <h3 class="font-display font-bold text-xl text-white">Your Shopping Cart</h3>
+        <button onclick="toggleCartModal()" class="text-neutral-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div id="cartItemsList" class="space-y-3 my-4 max-h-60 overflow-y-auto">
+        <p class="text-xs text-neutral-400 text-center py-6">Your cart is empty. Add some developer gear!</p>
+      </div>
+
+      <div class="pt-4 border-t border-neutral-800 space-y-3">
+        <div class="flex justify-between text-sm font-semibold">
+          <span class="text-neutral-300">Subtotal</span>
+          <span id="cartSubtotal" class="font-mono text-electric-400 font-bold">$0.00</span>
+        </div>
+
+        <button 
+          onclick="handleCheckout()"
+          class="w-full py-3 rounded-xl bg-electric-400 hover:bg-electric-300 text-black font-extrabold text-sm shadow-glow-yellow transition-all transform active:scale-98"
+        >
+          Checkout with Stripe &rarr;
+        </button>
+        <p class="text-[11px] text-center text-neutral-400">
+          Payment processing routed via backend Stripe Gateway API
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 px-4 py-3 rounded-2xl bg-black border border-electric-400/40 text-white text-xs font-semibold flex items-center space-x-2 shadow-glow-yellow-sm">
+    <span class="w-2 h-2 rounded-full bg-electric-400"></span>
+    <span id="toastMsg">Added to cart!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-neutral-800 bg-black py-8 px-4 sm:px-6 lg:px-8 text-center text-xs text-neutral-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2 text-neutral-400">
+        <span class="font-display font-bold text-white text-sm">Vibe<span class="text-electric-400">Shop</span></span>
+        <span>•</span>
+        <span>AI-Generated Microservice Demonstration</span>
+      </div>
+      <div class="text-[11px] text-neutral-400">
+        Run security analysis at <a href="http://localhost:3000" target="_blank" class="text-electric-400 underline font-semibold">ViberGuard Security Auditor</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Store Logic & API Fetching -->
+  <script>
+    // Product visual data with yellow/gold styling
+    const productVisuals = {
+      1: {
+        icon: '⌨️',
+        gradient: 'from-electric-400/15 via-yellow-500/5 to-transparent',
+        badge: 'Top Seller',
+        badgeColor: 'bg-electric-400/10 border-electric-400/30 text-electric-400',
+        desc: 'Hot-swappable mechanical switches, PBT keycaps, and CNC aluminum chassis.'
+      },
+      2: {
+        icon: '🖱️',
+        gradient: 'from-amber-400/15 via-yellow-600/5 to-transparent',
+        badge: 'Ergonomic',
+        badgeColor: 'bg-amber-400/10 border-amber-400/30 text-amber-300',
+        desc: '16,000 DPI sensor, ultra-lightweight 65g design, and silent optical switches.'
+      },
+      3: {
+        icon: '🎧',
+        gradient: 'from-yellow-400/15 via-amber-500/5 to-transparent',
+        badge: 'Spatial Audio',
+        badgeColor: 'bg-yellow-400/10 border-yellow-400/30 text-yellow-300',
+        desc: 'Active 40dB noise cancellation, 40-hour battery life, and lossless codecs.'
+      },
+      4: {
+        icon: '🖥️',
+        gradient: 'from-electric-400/15 via-yellow-500/5 to-transparent',
+        badge: '144Hz WQHD',
+        badgeColor: 'bg-electric-400/10 border-electric-400/30 text-electric-400',
+        desc: 'Curved IPS ultrawide display with HDR400 and USB-C 90W power delivery.'
+      }
+    };
+
+    let catalogProducts = [];
+    let cart = [];
+
+    // Load products on mount
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        catalogProducts = data.products || [];
+        renderProducts(catalogProducts);
+      } catch (err) {
+        console.error('Failed to load products', err);
+      }
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+
+      products.forEach(p => {
+        const visual = productVisuals[p.id] || {
+          icon: '📦',
+          gradient: 'from-electric-400/15 to-transparent',
+          badge: 'Featured',
+          badgeColor: 'bg-white/10 text-white',
+          desc: 'High quality developer essential accessory.'
+        };
+
+        const card = document.createElement('div');
+        card.className = 'glass-card specular-border rounded-2xl p-5 flex flex-col justify-between text-left';
+        card.innerHTML = `
+          <div>
+            <div class="w-full h-40 rounded-xl bg-gradient-to-tr ${visual.gradient} border border-neutral-800 flex flex-col items-center justify-center relative mb-4 overflow-hidden">
+              <span class="text-5xl transform hover:scale-110 transition-transform duration-300">${visual.icon}</span>
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[10px] font-mono border ${visual.badgeColor}">
+                ${visual.badge}
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] font-mono text-neutral-400 mb-1">
+              <span>SKU: VIBE-00${p.id}</span>
+              <span class="text-electric-400 font-semibold">${p.stock} in stock</span>
+            </div>
+
+            <h3 class="font-display font-bold text-base text-white tracking-tight mb-1.5">${p.name}</h3>
+            <p class="text-xs text-neutral-400 leading-relaxed mb-4">${visual.desc}</p>
+          </div>
+
+          <div class="pt-4 border-t border-neutral-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-neutral-400 block font-mono">PRICE</span>
+              <span class="font-mono text-lg font-black text-electric-400">$${p.price.toFixed(2)}</span>
+            </div>
+            <button 
+              onclick="addToCart(${p.id})"
+              class="px-4 py-2 rounded-xl bg-neutral-900 hover:bg-electric-400 border border-neutral-800 hover:border-electric-400 text-white hover:text-black text-xs font-bold transition-all shadow-sm"
+            >
+              + Add
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function addToCart(productId) {
+      const product = catalogProducts.find(p => p.id === productId);
+      if (!product) return;
+
+      cart.push(product);
+      updateCartUI();
+      showToast(`Added "${product.name}" to cart!`);
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').textContent = cart.length;
+      const list = document.getElementById('cartItemsList');
+      
+      if (cart.length === 0) {
+        list.innerHTML = '<p class="text-xs text-neutral-400 text-center py-6">Your cart is empty. Add some developer gear!</p>';
+        document.getElementById('cartSubtotal').textContent = '$0.00';
+        return;
+      }
+
+      let subtotal = 0;
+      list.innerHTML = cart.map((item, idx) => {
+        subtotal += item.price;
+        return `
+          <div class="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-between text-xs">
+            <span class="text-white font-medium truncate max-w-[180px]">${item.name}</span>
+            <div class="flex items-center space-x-2">
+              <span class="font-mono text-electric-400 font-bold">$${item.price.toFixed(2)}</span>
+              <button onclick="removeFromCart(${idx})" class="text-neutral-500 hover:text-rose-400 p-1">&times;</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function handleCheckout() {
+      if (cart.length === 0) {
+        showToast("Your cart is empty!");
+        return;
+      }
+      showToast("Routing to Stripe Gateway API...");
+      setTimeout(() => {
+        alert("Demo Checkout Simulated!\n\nIn a real app, this initiates checkout using the STRIPE_API_KEY hardcoded in config.py.\n\nViberGuard flags that exposed key during its security audit!");
+        cart = [];
+        updateCartUI();
+        toggleCartModal();
+      }, 700);
+    }
+
+    function handleSearch(term) {
+      if (!term.trim()) {
+        renderProducts(catalogProducts);
+        return;
+      }
+      const filtered = catalogProducts.filter(p => 
+        p.name.toLowerCase().includes(term.toLowerCase())
+      );
+      renderProducts(filtered);
+    }
+
+    function toggleCartModal() {
+      const m = document.getElementById('cartModal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    function toggleApiModal() {
+      const m = document.getElementById('apiModal');
+      m.classList.toggle('hidden');
+      m.classList.toggle('flex');
+    }
+
+    async function fetchEndpoint(url) {
+      const out = document.getElementById('apiOutput');
+      out.textContent = `// Querying ${url}...`;
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        out.textContent = JSON.stringify(json, null, 2);
+      } catch (err) {
+        out.textContent = `Error fetching ${url}: ` + err.message;
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Initialize
+    loadProducts();
+  </script>
+</body>
+</html>
